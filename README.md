@@ -202,7 +202,7 @@ src/
 
 ## License
 
-This project is distributed under the MIT License. All rights reserved.
+This project is distributed under the MIT License by Ahmed Arat (Aliases: medy17, medy404, `_medy__`). All rights reserved.
 
 ---
 
