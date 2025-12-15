@@ -19,7 +19,7 @@ export function setupContextMenu(): void {
     chrome.contextMenus.create(
         {
             id: BLACKLIST_MENU_ID,
-            title: 'Disable Spider Scribe on this site',
+            title: 'Disable Spyder-Scribe on this site',
             contexts: ['page'],
         },
         () => chrome.runtime.lastError && {}
@@ -80,8 +80,8 @@ async function toggleBlacklist(hostname: string): Promise<void> {
     const isBlacklisted = index === -1; // After toggle
     chrome.contextMenus.update(BLACKLIST_MENU_ID, {
         title: isBlacklisted
-            ? `Enable Spider Scribe on ${hostname}`
-            : 'Disable Spider Scribe on this site',
+            ? `Enable Spyder-Scribe on ${hostname}`
+            : 'Disable Spyder-Scribe on this site',
     });
 }
 
@@ -94,8 +94,8 @@ async function updateBlacklistMenuTitle(urlString: string): Promise<void> {
 
         chrome.contextMenus.update(BLACKLIST_MENU_ID, {
             title: isBlacklisted
-                ? `Enable Spider Scribe on ${hostname}`
-                : 'Disable Spider Scribe on this site',
+                ? `Enable Spyder-Scribe on ${hostname}`
+                : 'Disable Spyder-Scribe on this site',
         });
     } catch {
         // Invalid URL, ignore

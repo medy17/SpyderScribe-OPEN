@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Spider Scribe",
+    "name": "Spyder-Scribe",
     "version": "3.0",
-    "description": "Advanced AI translation using Spider Scribe & Grok with JSON-structured reliability.",
+    "description": "Advanced AI translation using Spyder-Scribe & Grok with JSON-structured reliability.",
     "permissions": [
         "storage",
         "activeTab",
@@ -13,7 +13,7 @@
     "host_permissions": [
         "https://generativelanguage.googleapis.com/*",
         "https://api.x.ai/*",
-      "https://api.openai.com/*"
+        "https://api.openai.com/*"
     ],
     "action": {
         "default_popup": "src/popup/index.html",

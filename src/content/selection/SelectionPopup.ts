@@ -311,7 +311,7 @@ export function showPopup(x: number, y: number): void {
     container.innerHTML = `
         <div class="popup-header">
             <div class="popup-logo">S</div>
-            <span class="popup-title">Spider Scribe</span>
+            <span class="popup-title">Spyder-Scribe</span>
             <button class="popup-close" aria-label="Close">✕</button>
         </div>
         <div class="popup-content">

@@ -16,7 +16,7 @@ export default function Popup() {
                     S
                 </div>
                 <h3 className="m-0 text-xl font-bold bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent tracking-tight font-display">
-                    Spider Scribe
+                    Spyder-Scribe
                 </h3>
             </header>
 

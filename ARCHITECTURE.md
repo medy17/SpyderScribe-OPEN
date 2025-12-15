@@ -1,6 +1,6 @@
-# Spider Scribe Architecture
+# Spyder-Scribe Architecture
 
-Spider Scribe is a Chrome browser extension that provides advanced AI-powered translation using multiple LLM providers (Gemini, Grok, OpenAI) with JSON-structured prompts for reliability.
+Spyder-Scribe is a Chrome browser extension that provides advanced AI-powered translation using multiple LLM providers (Gemini, Grok, OpenAI) with JSON-structured prompts for reliability.
 
 ## Table of Contents
 

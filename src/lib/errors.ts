@@ -1,5 +1,5 @@
 /**
- * Centralized error handling for the Spider Scribe extension.
+ * Centralized error handling for the Spyder-Scribe extension.
  * Provides typed errors with codes and user-friendly messages.
  */
 

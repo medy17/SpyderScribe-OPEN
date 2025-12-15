@@ -43,7 +43,7 @@ describe('setupContextMenu', () => {
         expect(chromeMock.contextMenus.create).toHaveBeenCalledWith(
             expect.objectContaining({
                 id: 'toggleBlacklist',
-                title: 'Disable Spider Scribe on this site',
+                title: 'Disable Spyder-Scribe on this site',
                 contexts: ['page'],
             }),
             expect.any(Function)

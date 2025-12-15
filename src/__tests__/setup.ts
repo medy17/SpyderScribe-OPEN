@@ -1,6 +1,3 @@
-/**
- * Global test setup for Spider Scribe
- */
 import { vi, beforeEach, afterEach } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import "fake-indexeddb/auto";

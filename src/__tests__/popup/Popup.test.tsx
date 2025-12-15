@@ -27,10 +27,10 @@ describe('Popup', () => {
         vi.clearAllMocks();
     });
 
-    it('should render header with Spider Scribe title', () => {
+    it('should render header with Spyder-Scribe title', () => {
         render(<Popup />);
 
-        expect(screen.getByText('Spider Scribe')).toBeInTheDocument();
+        expect(screen.getByText('Spyder-Scribe')).toBeInTheDocument();
     });
 
     it('should render all three tab triggers', () => {
