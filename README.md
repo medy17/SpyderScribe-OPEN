@@ -202,7 +202,7 @@ src/
 
 ## License
 
-This project is private. All rights reserved.
+This project is distributed under the MIT License. All rights reserved.
 
 ---
 
