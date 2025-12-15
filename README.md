@@ -1,155 +1,111 @@
-<p align="center">
-  <img src="icons/icon128.png" alt="Project Banner">
-</p>
+# Gemini Translator Pro
 
-<h1 align="center">Gemini Page Translator Pro</h1>
+Advanced AI translation browser extension using Gemini & Grok with JSON-structured reliability.
 
-<p align="center">
-  <a href="https://github.com/medy17/GeminiTranslate/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/medy17/GeminiTranslate" alt="License">
-  </a>
-  <a href="https://developer.chrome.com/docs/extensions/mv3/">
-    <img src="https://img.shields.io/badge/Manifest-V3-brightgreen.svg" alt="Manifest V3">
-  </a>
-   <a href="https://chromewebstore.google.com/">
-    <img src="https://img.shields.io/badge/Chrome%20Web%20Store-v2.2-blue.svg" alt="Chrome Web Store">
-  </a>
-</p>
+## Development
 
-<p align="center">
-  <strong>A comprehensive Chrome extension that uses high-performance AI models from Google and xAI to deliver context-aware web page translations.</strong>
-</p>
+This project uses [@crxjs/vite-plugin](https://crxjs.dev/vite-plugin) for hot-reloading during development.
 
----
+### Setup
 
-## Table of Contents
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-- [About The Project](#-about-the-project)
-    - [Key Features](#-key-features)
-- [ Tech Stack](#️-tech-stack)
-- [ Architecture](#-architecture)
-- [ Getting Started](#-getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-- [ Usage](#-usage)
-- [ Roadmap](#️-roadmap)
-- [ License](#-license)
-- [ Contact](#-contact)
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
----
+3. Load the extension in Chrome:
+   - Open `chrome://extensions`
+   - Enable "Developer mode"
+   - Click "Load unpacked"
+   - Select the `dist` folder
 
-##  About The Project
+4. The extension will now hot-reload when you save changes!
 
-**Gemini Page Translator Pro** is a modern Chrome extension built with Manifest V3 that harnesses the power of leading AI models from Google (Gemini) and xAI (Grok) to provide high-quality, context-aware translations of web pages.
+> **Tip:** If you see a "Cannot connect to Vite Dev Server" error, make sure `npm run dev` is running and click "Reload Extension".
 
+## Build
 
-###  Key Features
+To create a production build:
 
-*   **Multi-Provider AI Support:**
-    *   **Google Gemini:** Supports Gemini 2.5 Pro, Flash, and the Gemma 3 family for high-fidelity translation.
-    *   **xAI Grok:** Supports Grok 4 and Grok 4 Fast for rapid translations and/or NSFW content translation.
-*   **Immersive UI:**
-    *   A dark-themed popup with custom dropdowns and fluid interactions.
-*   **Flexible Translation Modes:**
-    *   **Full Page:** Translates visible text nodes across the entire DOM.
-    *   **Context Selection:** Highlight specific text, right-click, and translate within the page.
-*   **Smart Context Management:**
-    *   Utilises JSON-structured prompts to ensure the AI returns translation data that maps perfectly to the original text segments.
-    *   **Non-Destructive:** Translations are injected as overlay spans. Clicking a translated sentence instantly toggles it back to the original text.
-*   **Efficiency & Caching:**
-    *   Uses a session-based caching system to prevent redundant API calls for previously translated phrases.
-    *   Batches requests to avoid API rate limits while maximising throughput.
-*   **Automation:**
-    *   Define a list of domains to automatically trigger translation upon visiting.
+```bash
+npm run build
+```
 
----
+The built extension will be in the `dist` folder.
 
-###  Screenshots
+## Tech Stack
 
-|                  Main Interface                   |                    Settings Page                    |
-|:-------------------------------------------------:|:---------------------------------------------------:|
-| <img height="300" src="readme-assets/popup.png"/> | <img height="300" src="readme-assets/popup_2.png"/> |
----
-+
-##  Tech Stack
+- React 19 + TypeScript
+- Vite 7 with @crxjs/vite-plugin
+- Tailwind CSS 4
+- shadcn/ui components
 
-*   **Core:** HTML5, CSS3 (Variables, Keyframe Animations), Vanilla JavaScript (ES6+).
-*   **Platform:** Chrome Extension API (Manifest V3).
-*   **Styling:** Custom CSS.
-*   **AI Integration:** RESTful integration with Google Generative Language API and xAI API.
+## React Compiler
 
----
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-##  Architecture
+## Expanding the ESLint configuration
 
-The project is built with the **Manifest V3** standard.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-1.  **Service Worker:** Handles the heavy lifting of API communication. It manages the request queue, enforces concurrency limits, and maintains the translation cache.
-2.  **Content Script:** Uses a `TreeWalker` to efficiently traverse the DOM, identifying translateable text nodes while ignoring code, scripts, and hidden elements. It injects translations non-destructively, preserving the original page structure and event listeners.
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
----
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-##  Getting Started
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-### Prerequisites
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-*   A Chromium-based web browser (Chrome, Edge, Brave, Arc).
-*   An API key:
-    *   **Google AI Studio (or Vertex) Key** (for Gemini models).
-    *   **xAI API Key** (for Grok models).
-   _*   **Claude** (Coming soon)_
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-### Installation
-
-1.  Clone the repository or download the ZIP file.
-    ```bash
-    git clone https://github.com/medy17/GeminiTranslate.git
-    ```
-2.  Open your browser and navigate to the extensions management page (`chrome://extensions`).
-3.  Enable **"Developer mode"** (usually a toggle in the top-right).
-4.  Click **"Load unpacked"**.
-5.  Select the directory containing the `manifest.json` file.
-6.  If you get an error regarding the `__tests__` folder, run `npm run build` then load the resulting `dist` folder instead. 
-
----
-
-##  Usage
-
-1.  **Configuration:**
-    *   Click the extension icon in your toolbar.
-    *   Navigate to the **Settings** tab.
-    *   Enter your API Key(s) and select your preferred AI Model.
-    *   (Optional) Add domains to the "Auto-translate" list. (Be careful with this since some websites may contain a huge number of DOM nodes and will eat up your quota).
-2.  **Translating a Page:**
-    *   Open the popup on any webpage.
-    *   Select your **Source** and **Target** languages (or leave Source as "Auto-detect").
-    *   Click the **"Translate Page"** button. The button will animate, and an overlay will appear showing progress.
-3.  **Translating Selection:**
-    *   Highlight text on a webpage.
-    *   Right-click and select **"Translate Selection"** from the context menu.
-4.  **Interacting:**
-    *   Hover over translated text to see a highlight effect.
-    *   Click any translated sentence to revert it to the original language.
-
----
-
-##  Roadmap
-
-- [x] Full Page Translation with Batching
-- [x] Context Menu Integration
-- [x] Dual AI Provider Support (Google & xAI)
-- [x] Custom UI with Dark Mode & Animations
-- [ ] Advanced filtering (exclude strictly technical code blocks or formulas).
-- [ ] Anthropic model support (probably Haiku).
-
-##  License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-##  Contact
-
-Ahmed Arat - [aratahmed@gmail.com](mailto:aratahmed@gmail.com)
-
-Project Link: [https://github.com/medy17/GeminiTranslate](https://github.com/medy17/GeminiTranslate)
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
