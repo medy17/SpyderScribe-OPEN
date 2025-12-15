@@ -1,9 +1,9 @@
 /**
  * Global test setup for Spider Scribe
  */
-import { vi, beforeEach, afterEach } from 'vitest';
-import '@testing-library/jest-dom/vitest';
-import 'fake-indexeddb/auto';
+import { vi, beforeEach, afterEach } from "vitest";
+import "@testing-library/jest-dom/vitest";
+import "fake-indexeddb/auto";
 
 // --- Chrome API Mocks ---
 const mockStorage: Record<string, unknown> = {};
@@ -11,15 +11,27 @@ const mockStorage: Record<string, unknown> = {};
 const chromeMock = {
     storage: {
         sync: {
-            get: vi.fn((keys: string | string[] | null, callback?: (result: Record<string, unknown>) => void) => {
-                const keysArray = keys === null ? Object.keys(mockStorage) : Array.isArray(keys) ? keys : [keys];
-                const result: Record<string, unknown> = {};
-                keysArray.forEach((key) => {
-                    if (key in mockStorage) result[key] = mockStorage[key];
-                });
-                if (callback) callback(result);
-                return Promise.resolve(result);
-            }),
+            get: vi.fn(
+                (
+                    keys: string | string[] | null,
+                    callback?: (result: Record<string, unknown>) => void,
+                ) => {
+                    const keysArray =
+                        keys === null
+                            ? Object.keys(mockStorage)
+                            : Array.isArray(keys)
+                                ? keys
+                                : [keys];
+
+                    const result: Record<string, unknown> = {};
+                    keysArray.forEach((key) => {
+                        if (key in mockStorage) result[key] = mockStorage[key];
+                    });
+
+                    if (callback) callback(result);
+                    return Promise.resolve(result);
+                },
+            ),
             set: vi.fn((items: Record<string, unknown>, callback?: () => void) => {
                 Object.assign(mockStorage, items);
                 if (callback) callback();
@@ -43,9 +55,13 @@ const chromeMock = {
     tabs: {
         query: vi.fn(),
         sendMessage: vi.fn(),
+        get: vi.fn(),
+        onActivated: { addListener: vi.fn() },
+        onUpdated: { addListener: vi.fn() },
     },
     contextMenus: {
         create: vi.fn(),
+        update: vi.fn(),
         onClicked: {
             addListener: vi.fn(),
         },
