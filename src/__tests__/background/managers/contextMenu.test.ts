@@ -69,9 +69,9 @@ describe('setupContextMenu', () => {
         setupContextMenu();
 
         // Simulate click with url included
-        const info = { menuItemId: 'translateSelection' };
+        const info = { menuItemId: 'translateSelection', editable: false };
         const tab = { id: 123, url: 'https://example.com' };
-        await clickHandler(info, tab);
+        await clickHandler(info as chrome.contextMenus.OnClickData, tab as chrome.tabs.Tab);
 
         expect(chromeMock.tabs.sendMessage).toHaveBeenCalledWith(123, { action: 'translateSelection' });
     });
@@ -86,7 +86,7 @@ describe('setupContextMenu', () => {
         const { setupContextMenu } = await import('@/background/managers/contextMenu');
         setupContextMenu();
 
-        await clickHandler({ menuItemId: 'translateSelection' }, {}); // No tab id or url
+        await clickHandler({ menuItemId: 'translateSelection', editable: false } as chrome.contextMenus.OnClickData, {} as chrome.tabs.Tab); // No tab id or url
 
         expect(chromeMock.tabs.sendMessage).not.toHaveBeenCalled();
     });
@@ -102,9 +102,9 @@ describe('setupContextMenu', () => {
         setupContextMenu();
 
         // Simulate click on blacklist toggle
-        const info = { menuItemId: 'toggleBlacklist' };
+        const info = { menuItemId: 'toggleBlacklist', editable: false };
         const tab = { id: 123, url: 'https://example.com' };
-        await clickHandler(info, tab);
+        await clickHandler(info as chrome.contextMenus.OnClickData, tab as chrome.tabs.Tab);
 
         // Should have updated storage with blacklist
         expect(chromeMock.storage.sync.set).toHaveBeenCalledWith({

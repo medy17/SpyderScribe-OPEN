@@ -141,3 +141,140 @@ async function processBatch({ texts, source, target }: { texts: string[]; source
         return { success: false, error: getUserFriendlyMessage(error) };
     }
 }
+
+// --- Streaming Support ---
+
+import { callAIStream } from '../services/translation';
+import { createArrayStreamParser } from '../services/streamParser';
+
+export interface StreamingTranslationRequest {
+    action: 'startStreamingTranslation';
+    texts: string[];
+    source: string;
+    target: string;
+}
+
+/**
+ * Handle port-based streaming translation
+ * Messages sent via port:
+ * - { type: 'cached', index: number, text: string } - Cached translation
+ * - { type: 'element', index: number, text: string } - Streamed translation element
+ * - { type: 'complete', translations: string[] } - All done
+ * - { type: 'error', error: string, errorCode?: ErrorCode } - Error occurred
+ */
+export function handleStreamingPort(port: chrome.runtime.Port): void {
+    port.onMessage.addListener((request: StreamingTranslationRequest) => {
+        if (request.action === 'startStreamingTranslation') {
+            processBatchStream(request, port).catch((err) => {
+                const error = err instanceof TranslationError ? err : new TranslationError(ErrorCode.UNKNOWN_ERROR, err?.message);
+                port.postMessage({
+                    type: 'error',
+                    error: getUserFriendlyMessage(error),
+                    errorCode: error.code
+                });
+            });
+        }
+    });
+}
+
+async function processBatchStream(
+    { texts, source, target }: { texts: string[]; source: string; target: string },
+    port: chrome.runtime.Port
+): Promise<void> {
+    const result = await chrome.storage.sync.get(['selectedModel', 'geminiApiKey', 'grokApiKey', 'openaiApiKey']);
+    const selectedModel = (result.selectedModel as string) || '';
+    const geminiApiKey = (result.geminiApiKey as string) || '';
+    const grokApiKey = (result.grokApiKey as string) || '';
+    const openaiApiKey = (result.openaiApiKey as string) || '';
+
+    // Track all results for final response
+    const results: (string | null)[] = new Array(texts.length).fill(null);
+    const missingIndices: number[] = [];
+    const textsToTranslate: string[] = [];
+
+    // 1. Check cache and send cached items immediately
+    await Promise.all(texts.map(async (text, index) => {
+        const cached = await translationCache.get(source, target, text);
+        if (cached !== null) {
+            results[index] = cached;
+            // Send cached translation immediately
+            port.postMessage({ type: 'cached', index, text: cached });
+        } else {
+            missingIndices.push(index);
+            textsToTranslate.push(text);
+        }
+    }));
+
+    // All cached - we're done
+    if (textsToTranslate.length === 0) {
+        port.postMessage({ type: 'complete', translations: results as string[] });
+        return;
+    }
+
+    // 2. Stream translations for missing texts
+    let streamedIndex = 0;
+
+    const parser = createArrayStreamParser({
+        onElement: (translation: string, parserIndex: number) => {
+            // Map parser index to original index
+            const originalIndex = missingIndices[parserIndex];
+            const originalText = textsToTranslate[parserIndex];
+
+            results[originalIndex] = translation;
+
+            // Send to content script IMMEDIATELY (before any async operations)
+            port.postMessage({ type: 'element', index: originalIndex, text: translation });
+
+            // Cache in background - don't await (prevents port disconnect race)
+            translationCache.set(source, target, originalText, translation).catch(e => {
+                console.error('Cache set failed:', e);
+            });
+
+            streamedIndex++;
+        },
+        onComplete: (elements: string[]) => {
+            // Verify we got the right count
+            if (elements.length !== textsToTranslate.length) {
+                port.postMessage({
+                    type: 'error',
+                    error: `Expected ${textsToTranslate.length} translations, got ${elements.length}`,
+                    errorCode: ErrorCode.RESPONSE_MISMATCH
+                });
+                return;
+            }
+            port.postMessage({ type: 'complete', translations: results as string[] });
+        },
+        onError: (error: Error) => {
+            port.postMessage({
+                type: 'error',
+                error: error.message,
+                errorCode: ErrorCode.JSON_PARSE_ERROR
+            });
+        }
+    });
+
+    try {
+        await callAIStream(
+            textsToTranslate,
+            source,
+            target,
+            selectedModel,
+            geminiApiKey,
+            grokApiKey,
+            openaiApiKey,
+            (chunk: string) => {
+                parser.feed(chunk);
+            }
+        );
+
+        // Signal end of stream to parser
+        parser.end();
+    } catch (error: unknown) {
+        console.error('Streaming Translation Error:', error);
+        if (error instanceof TranslationError) {
+            port.postMessage({ type: 'error', error: error.userMessage, errorCode: error.code });
+        } else {
+            port.postMessage({ type: 'error', error: getUserFriendlyMessage(error) });
+        }
+    }
+}

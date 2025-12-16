@@ -122,3 +122,109 @@ export async function fetchOpenAI(
 
     return results;
 }
+
+/**
+ * Streaming version for a single OpenAI batch
+ */
+async function fetchOpenAIBatchStream(
+    apiKey: string,
+    model: string,
+    systemPrompt: string,
+    userPrompt: string,
+    onChunk: (text: string) => void
+): Promise<void> {
+    let resp: Response;
+    try {
+        resp = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+                model: model,
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt },
+                ],
+                reasoning_effort: 'low',
+                stream: true,
+            }),
+        });
+    } catch (e) {
+        throw new TranslationError(ErrorCode.NETWORK_ERROR, 'Failed to connect to OpenAI API', e);
+    }
+
+    if (!resp.ok) {
+        const errorBody = await resp.text().catch(() => '');
+        const errorData = safeJsonParse<{ error?: { message?: string } }>(errorBody, {});
+        const errorMessage = errorData.error?.message || `HTTP ${resp.status}`;
+        const errorCode = getErrorCodeFromStatus(resp.status);
+        throw new TranslationError(errorCode, errorMessage);
+    }
+
+    if (!resp.body) {
+        throw new TranslationError(ErrorCode.INVALID_RESPONSE, 'No response body for streaming');
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    try {
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+
+            // Process complete SSE lines
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    const jsonStr = line.slice(6).trim();
+                    if (jsonStr && jsonStr !== '[DONE]') {
+                        try {
+                            const data = JSON.parse(jsonStr);
+                            const content = data.choices?.[0]?.delta?.content;
+                            if (content) {
+                                onChunk(content);
+                            }
+                        } catch {
+                            // Ignore parse errors for incomplete chunks
+                        }
+                    }
+                }
+            }
+        }
+    } finally {
+        reader.releaseLock();
+    }
+}
+
+/**
+ * Streaming entry point for OpenAI - handles chunking for large batches
+ */
+export async function fetchOpenAIStream(
+    apiKey: string,
+    model: string,
+    systemPrompt: string,
+    userPrompt: string,
+    onChunk: (text: string) => void
+): Promise<void> {
+    const inputArray: string[] = JSON.parse(userPrompt);
+
+    // If small enough, send directly
+    if (inputArray.length <= OPENAI_MAX_ITEMS_PER_BATCH) {
+        return fetchOpenAIBatchStream(apiKey, model, systemPrompt, userPrompt, onChunk);
+    }
+
+    // Chunk large batches - stream each chunk sequentially
+    for (let i = 0; i < inputArray.length; i += OPENAI_MAX_ITEMS_PER_BATCH) {
+        const chunk = inputArray.slice(i, i + OPENAI_MAX_ITEMS_PER_BATCH);
+        const chunkPrompt = JSON.stringify(chunk);
+        await fetchOpenAIBatchStream(apiKey, model, systemPrompt, chunkPrompt, onChunk);
+    }
+}

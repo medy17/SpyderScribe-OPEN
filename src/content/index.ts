@@ -55,8 +55,9 @@ function removeOverlay() {
     if (el) el.remove();
 }
 
-// --- Core Translation Engine ---
-async function runFullPageTranslation(source: string, target: string) {
+// --- Core Translation Engine (fallback - kept for potential non-streaming use) ---
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function _runFullPageTranslation(source: string, target: string) {
     if (isProcessing) return;
     isProcessing = true;
     const overlay = createOverlay('Scanning page...');
@@ -164,6 +165,246 @@ async function runFullPageTranslation(source: string, target: string) {
         isProcessing = false;
     }
 }
+
+// --- Streaming Translation Engine ---
+interface StreamingBatchItem {
+    node: Node;
+    text: string;
+    placeholder: HTMLElement | null;
+    globalIndex: number;
+    leadingWs: string;
+    trailingWs: string;
+}
+
+/**
+ * Streaming version of page translation
+ * Shows shimmer placeholders and updates them progressively as translations arrive
+ */
+async function runStreamingTranslation(source: string, target: string) {
+    if (isProcessing) return;
+    isProcessing = true;
+    const overlay = createOverlay('Scanning page...');
+
+    // Add shimmer and fade animation styles
+    if (!document.getElementById('spider-stream-styles')) {
+        const s = document.createElement('style');
+        s.id = 'spider-stream-styles';
+        s.innerHTML = `
+            @keyframes spiderPulse {
+                0%, 100% { opacity: 0.4; }
+                50% { opacity: 0.7; }
+            }
+            .spider-shimmer {
+                animation: spiderPulse 1.2s ease-in-out infinite;
+                color: inherit !important;
+                background: inherit !important;
+            }
+            .spider-fade-in {
+                animation: spiderFadeIn 0.3s ease-out;
+            }
+            @keyframes spiderFadeIn {
+                from { opacity: 0.5; }
+                to { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(s);
+    }
+
+    try {
+        // 1. Collect Text Nodes
+        const textNodes: Node[] = [];
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+            acceptNode: (node) => {
+                const parent = node.parentElement;
+                if (!parent) return NodeFilter.FILTER_REJECT;
+
+                // Filters - check ancestors, not just direct parent
+                if (parent.closest('#spider-overlay')) return NodeFilter.FILTER_REJECT;
+
+                // Skip code blocks - check ANY ancestor, not just direct parent
+                if (parent.closest('script, style, noscript, textarea, input, code, pre, kbd, samp, var')) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+
+                if (parent.isContentEditable) return NodeFilter.FILTER_REJECT;
+                if (parent.closest('[translate="no"]')) return NodeFilter.FILTER_REJECT;
+                if ((node.textContent?.trim().length ?? 0) < 2) return NodeFilter.FILTER_REJECT;
+                if (parent.classList.contains('spider-translated')) return NodeFilter.FILTER_REJECT;
+                if (parent.classList.contains('spider-shimmer')) return NodeFilter.FILTER_REJECT;
+
+                return NodeFilter.FILTER_ACCEPT;
+            },
+        });
+
+        while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+        if (textNodes.length === 0) {
+            overlay.innerHTML = 'No text found.';
+            setTimeout(removeOverlay, 2000);
+            isProcessing = false;
+            return;
+        }
+
+        // 2. Process in batches with streaming
+        let globalIndex = 0;
+        const allItems: StreamingBatchItem[] = [];
+        let currentBatch: StreamingBatchItem[] = [];
+        let currentCharCount = 0;
+        let translatedCount = 0;
+        let errorOccurred = false;
+
+        // Pre-create all items with placeholders
+        for (const node of textNodes) {
+            const originalText = node.textContent || '';
+            const trimmedText = originalText.trim();
+
+            // Extract leading/trailing whitespace to preserve
+            const leadingWs = originalText.match(/^\s*/)?.[0] || '';
+            const trailingWs = originalText.match(/\s*$/)?.[0] || '';
+
+            // Create shimmer placeholder
+            const placeholder = document.createElement('span');
+            placeholder.className = 'spider-shimmer';
+            placeholder.textContent = originalText; // Use original text with whitespace for sizing
+            placeholder.dataset.originalText = originalText;
+            placeholder.dataset.globalIndex = String(globalIndex);
+
+            // Replace node with placeholder
+            if (node.parentNode) {
+                node.parentNode.replaceChild(placeholder, node);
+            }
+
+            const item: StreamingBatchItem = {
+                node,
+                text: trimmedText,  // Trimmed for translation
+                placeholder,
+                globalIndex,
+                leadingWs,   // Store whitespace to reapply
+                trailingWs
+            };
+            allItems.push(item);
+
+            currentBatch.push(item);
+            currentCharCount += trimmedText.length;
+            globalIndex++;
+
+            // Process batch when limit reached
+            if (currentCharCount >= BATCH_CHAR_LIMIT || globalIndex === textNodes.length) {
+                const batchItems = [...currentBatch];
+
+                // Create mapping from batch-local index to global index
+                const indexMap = batchItems.map(item => item.globalIndex);
+
+                overlay.innerHTML = `Translating... (${Math.round((globalIndex / textNodes.length) * 100)}%)`;
+
+                // Stream this batch
+                await streamBatch(batchItems, source, target, (batchLocalIndex, translation) => {
+                    // Map batch-local index to global index
+                    const globalIdx = indexMap[batchLocalIndex];
+                    const item = allItems[globalIdx];
+
+                    if (item && item.placeholder && item.placeholder.parentNode) {
+                        const span = document.createElement('span');
+                        span.className = 'spider-translated spider-trans-highlight spider-fade-in';
+                        // Preserve original whitespace around translation
+                        const translationWithWs = item.leadingWs + translation + item.trailingWs;
+                        span.textContent = translationWithWs;
+                        span.title = `Original: ${item.leadingWs}${item.text}${item.trailingWs}`;
+                        span.dataset.original = item.leadingWs + item.text + item.trailingWs;
+                        span.style.cursor = 'help';
+
+                        const originalWithWs = item.leadingWs + item.text + item.trailingWs;
+                        span.onclick = (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (span.textContent === translationWithWs) {
+                                span.textContent = originalWithWs;
+                                span.style.opacity = '0.6';
+                            } else {
+                                span.textContent = translationWithWs;
+                                span.style.opacity = '1';
+                            }
+                        };
+
+                        item.placeholder.parentNode.replaceChild(span, item.placeholder);
+                        item.placeholder = null;
+                    }
+                    translatedCount++;
+                }, (error) => {
+                    errorOccurred = true;
+                    overlay.innerHTML = `⚠️ ${error}`;
+                });
+
+                currentBatch = [];
+                currentCharCount = 0;
+            }
+        }
+
+        // Show completion status
+        if (errorOccurred && translatedCount === 0) {
+            showError('Translation failed. Check your API key in Settings.');
+            // Revert all placeholders
+            allItems.forEach(item => {
+                if (item.placeholder && item.placeholder.parentNode) {
+                    const textNode = document.createTextNode(item.text);
+                    item.placeholder.parentNode.replaceChild(textNode, item.placeholder);
+                }
+            });
+        } else if (errorOccurred) {
+            overlay.innerHTML = `Partially complete (${translatedCount}/${allItems.length})`;
+            setTimeout(removeOverlay, 4000);
+        } else {
+            overlay.innerHTML = 'Translation Complete!';
+            setTimeout(removeOverlay, 3000);
+        }
+    } catch (error) {
+        console.error('Streaming translation error:', error);
+        showError(getUserFriendlyMessage(error));
+    } finally {
+        isProcessing = false;
+    }
+}
+
+/**
+ * Stream a batch using Chrome port
+ */
+function streamBatch(
+    items: StreamingBatchItem[],
+    source: string,
+    target: string,
+    onTranslation: (index: number, text: string) => void,
+    onError: (error: string) => void
+): Promise<void> {
+    return new Promise((resolve) => {
+        const port = chrome.runtime.connect({ name: 'streaming-translation' });
+
+        port.onMessage.addListener((msg) => {
+            if (msg.type === 'cached' || msg.type === 'element') {
+                onTranslation(msg.index, msg.text);
+            } else if (msg.type === 'complete') {
+                port.disconnect();
+                resolve();
+            } else if (msg.type === 'error') {
+                onError(msg.error);
+                port.disconnect();
+                resolve();
+            }
+        });
+
+        port.onDisconnect.addListener(() => {
+            resolve();
+        });
+
+        // Start streaming
+        port.postMessage({
+            action: 'startStreamingTranslation',
+            texts: items.map(item => item.text),
+            source,
+            target
+        });
+    });
+}
+
 
 function applyTranslations(nodeItems: { node: Node; text: string }[], translatedTexts: string[]) {
     nodeItems.forEach((item, index) => {
@@ -371,7 +612,7 @@ if (!win.hasSpiderTranslator) {
     // Message listener
     chrome.runtime.onMessage.addListener((msg, _, sendResponse) => {
         if (msg.action === 'ping') return sendResponse(true);
-        if (msg.action === 'translate') runFullPageTranslation(msg.source, msg.target);
+        if (msg.action === 'translate') runStreamingTranslation(msg.source, msg.target);
         else if (msg.action === 'revert') revertTranslations();
         else if (msg.action === 'translateSelection') translateCurrentSelection();
     });
