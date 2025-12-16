@@ -41,7 +41,7 @@
 
 - Google Gemini (2.5 Flash, 2.5 Pro, and more)
 - xAI Grok (4.1 Fast, Reasoning variants)
-- OpenAI GPT (5-nano, 5-mini)
+- OpenAI GPT (5-nano, 5-mini, 5)
 
 ⚡ **Translation Modes**
 

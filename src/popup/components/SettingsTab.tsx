@@ -91,6 +91,7 @@ export default function SettingsTab() {
                             <SelectLabel className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-2 py-1.5">OpenAI Models</SelectLabel>
                             <SelectItem value="gpt-5-nano" className="focus:bg-[#27272a] data-[state=checked]:bg-violet-500/10 data-[state=checked]:text-violet-400">GPT-5 Nano</SelectItem>
                             <SelectItem value="gpt-5-mini" className="focus:bg-[#27272a] data-[state=checked]:bg-violet-500/10 data-[state=checked]:text-violet-400">GPT-5 Mini</SelectItem>
+                            <SelectItem value="gpt-5" className="focus:bg-[#27272a] data-[state=checked]:bg-violet-500/10 data-[state=checked]:text-violet-400">GPT-5</SelectItem>
                         </SelectGroup>
                         <SelectGroup>
                             <SelectLabel className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-2 py-1.5 border-t border-zinc-800 mt-1">xAI Models (Grok)</SelectLabel>

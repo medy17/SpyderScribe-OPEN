@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Loader2, Sparkles, RotateCcw, AlertCircle } from "lucide-react";
+import { Loader2, Sparkles, RotateCcw, AlertCircle, Save } from "lucide-react";
 import { getUserFriendlyMessage, ErrorCode } from '@/lib/errors';
+import { toast } from 'sonner';
 
 const LANGUAGES = [
     { value: "Auto-detect", label: "✨ Auto-detect" },
@@ -27,6 +28,7 @@ export default function TranslateTab() {
     const [status, setStatus] = useState("");
     const [isTranslating, setIsTranslating] = useState(false);
     const [isError, setIsError] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         chrome.storage.sync.get(['sourceLang', 'targetLang'], (result) => {
@@ -39,6 +41,18 @@ export default function TranslateTab() {
             if (data.targetLang) setTargetLang(data.targetLang);
         });
     }, []);
+
+    const handleSave = () => {
+        setIsSaving(true);
+        chrome.storage.sync.set({ sourceLang, targetLang }, () => {
+            setIsSaving(false);
+            if (chrome.runtime.lastError) {
+                toast.error("Failed to save preferences");
+                return;
+            }
+            toast.success("Language preferences saved!");
+        });
+    };
 
     const showStatus = (message: string, error = false) => {
         setStatus(message);
@@ -162,11 +176,11 @@ export default function TranslateTab() {
             </div>
 
             {/* Action Buttons */}
-            <div className="pt-4 flex flex-col gap-3">
+            <div className="pt-2 flex flex-col gap-3">
                 <Button
                     onClick={handleTranslate}
                     disabled={isTranslating}
-                    className="w-full h-12 text-sm font-semibold rounded-[10px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 shadow-lg shadow-purple-500/25"
+                    className="w-full h-11 text-sm font-semibold rounded-[10px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 shadow-lg shadow-purple-500/25"
                 >
                     {isTranslating ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -177,9 +191,22 @@ export default function TranslateTab() {
                 </Button>
 
                 <Button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="w-full h-11 text-sm font-semibold rounded-[10px] bg-violet-600 hover:bg-violet-500 transition-all"
+                >
+                    {isSaving ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                        <Save className="mr-2 h-4 w-4" />
+                    )}
+                    {isSaving ? "Saving..." : "Save Settings"}
+                </Button>
+
+                <Button
                     variant="outline"
                     onClick={handleRevert}
-                    className="w-full h-12 text-sm font-semibold rounded-[10px] bg-transparent border border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
+                    className="w-full h-11 text-sm font-semibold rounded-[10px] bg-transparent border border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
                 >
                     <RotateCcw className="mr-2 h-4 w-4" />
                     Revert to Original
