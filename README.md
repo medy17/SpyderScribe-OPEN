@@ -38,26 +38,31 @@
 ## Features
 
 🌐 **Multi-Provider Translation**
+
 - Google Gemini (2.5 Flash, 2.5 Pro, and more)
 - xAI Grok (4.1 Fast, Reasoning variants)
 - OpenAI GPT (5-nano, 5-mini)
 
 ⚡ **Translation Modes**
+
 - **Full Page** – Translate entire web pages with one click
 - **Selection Popup** – Select text to see instant translations
 - **Context Menu** – Right-click to translate selection
 
 🧠 **Smart Caching**
+
 - Hybrid in-memory + IndexedDB cache
 - 7-day TTL with LRU eviction
 - Survives browser/extension restarts
 
 🎨 **Modern UI**
+
 - Dark theme with glassmorphism design
 - Draggable & resizable translation popups
 - Toast notifications for feedback
 
 🛡️ **Privacy & Control**
+
 - Per-site blacklisting
 - All API keys stored locally
 - No data sent to third parties (only to chosen AI provider)
@@ -66,9 +71,10 @@
 
 ## Screenshots
 
-| Translate   |      Settings      |  Cache |
-|----------|:-------------:|:------:|
-| <img width="355" height="470" alt="image" src="https://github.com/user-attachments/assets/6a656eb8-fb7d-4c63-a9b1-a6289b29a402" /> |  <img width="354" height="543" alt="image" src="https://github.com/user-attachments/assets/65e50311-8ec8-4c88-8262-4697e3a710d5" /> | <img width="355" height="548" alt="image" src="https://github.com/user-attachments/assets/0e191cad-5b2b-4516-a005-b9c9560eefba" /> |
+| Translate                                                                                                                          |                                                              Settings                                                              |                                                               Cache                                                                |
+|------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------:|
+| <img width="355" height="470" alt="image" src="https://github.com/user-attachments/assets/6a656eb8-fb7d-4c63-a9b1-a6289b29a402" /> | <img width="354" height="543" alt="image" src="https://github.com/user-attachments/assets/65e50311-8ec8-4c88-8262-4697e3a710d5" /> | <img width="355" height="548" alt="image" src="https://github.com/user-attachments/assets/0e191cad-5b2b-4516-a005-b9c9560eefba" /> |
+
 ---
 
 ## Installation
@@ -92,10 +98,10 @@
    ```
 
 4. **Load in Chrome**
-   - Navigate to `chrome://extensions`
-   - Enable **Developer mode** (top right)
-   - Click **Load unpacked**
-   - Select the `dist` folder
+    - Navigate to `chrome://extensions`
+    - Enable **Developer mode** (top right)
+    - Click **Load unpacked**
+    - Select the `dist` folder
 
 ---
 
@@ -126,13 +132,13 @@
 
 Open the extension popup and go to the **Settings** tab:
 
-| Setting | Description |
-|---------|-------------|
-| **Gemini API Key** | Your Google AI Studio API key |
-| **Grok API Key** | Your xAI API key |
-| **OpenAI API Key** | Your OpenAI API key |
-| **Model** | Choose which AI model to use |
-| **Custom Prompt** | Optional custom translation instructions |
+| Setting            | Description                              |
+|--------------------|------------------------------------------|
+| **Gemini API Key** | Your Google AI Studio API key            |
+| **Grok API Key**   | Your xAI API key                         |
+| **OpenAI API Key** | Your OpenAI API key                      |
+| **Model**          | Choose which AI model to use             |
+| **Custom Prompt**  | Optional custom translation instructions |
 
 ### Getting API Keys
 
@@ -144,7 +150,8 @@ Open the extension popup and go to the **Settings** tab:
 
 ## Development
 
-This project uses [Vite](https://vitejs.dev/) with [@crxjs/vite-plugin](https://crxjs.dev/vite-plugin) for hot-reloading during development.
+This project uses [Vite](https://vitejs.dev/) with [@crxjs/vite-plugin](https://crxjs.dev/vite-plugin) for hot-reloading
+during development.
 
 ### Setup
 
@@ -159,25 +166,25 @@ Then load the `dist` folder as an unpacked extension. Changes will hot-reload au
 
 ### Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start dev server with HMR |
-| `pnpm build` | Production build |
-| `pnpm lint` | Run ESLint |
-| `pnpm test` | Run tests |
-| `pnpm test:watch` | Run tests in watch mode |
-| `pnpm test:coverage` | Run tests with coverage |
+| Command              | Description               |
+|----------------------|---------------------------|
+| `pnpm dev`           | Start dev server with HMR |
+| `pnpm build`         | Production build          |
+| `pnpm lint`          | Run ESLint                |
+| `pnpm test`          | Run tests                 |
+| `pnpm test:watch`    | Run tests in watch mode   |
+| `pnpm test:coverage` | Run tests with coverage   |
 
 ### Tech Stack
 
-| Technology | Version |
-|------------|---------|
-| React | 19 |
-| TypeScript | 5.9 |
-| Vite | 7 |
-| Tailwind CSS | 4 |
-| Vitest | 4 |
-| shadcn/ui | Latest |
+| Technology   | Version |
+|--------------|---------|
+| React        | 19      |
+| TypeScript   | 5.9     |
+| Vite         | 7       |
+| Tailwind CSS | 4       |
+| Vitest       | 4       |
+| shadcn/ui    | Latest  |
 
 ---
 
@@ -186,7 +193,7 @@ Then load the `dist` folder as an unpacked extension. Changes will hot-reload au
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed documentation on:
 
 - Component structure
-- Data flow diagrams  
+- Data flow diagrams
 - Translation pipeline
 - Caching system
 - Error handling
@@ -225,7 +232,8 @@ src/
 
 ## License
 
-This project is distributed under the MIT License by Ahmed Arat (Aliases: medy17, medy404, `_medy__`). All rights reserved.
+This project is distributed under the MIT License by Ahmed Arat (Aliases: medy17, medy404, `_medy__`). All rights
+reserved.
 
 ---
 
