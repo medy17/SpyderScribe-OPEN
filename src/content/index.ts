@@ -190,21 +190,32 @@ async function runStreamingTranslation(source: string, target: string) {
         const s = document.createElement('style');
         s.id = 'spider-stream-styles';
         s.innerHTML = `
-            @keyframes spiderPulse {
-                0%, 100% { opacity: 0.4; }
-                50% { opacity: 0.7; }
+            @keyframes spiderShimmer {
+                0% { background-position: -100% 0; }
+                100% { background-position: 100% 0; }
             }
             .spider-shimmer {
-                animation: spiderPulse 1.2s ease-in-out infinite;
-                color: inherit !important;
-                background: inherit !important;
+                background: linear-gradient(
+                    90deg,
+                    transparent 0%,
+                    rgba(100, 100, 100, 0.25) 50%,
+                    transparent 100%
+                );
+                background-size: 200% 100%;
+                animation: spiderShimmer 1.2s ease-in-out infinite;
+            }
+            @keyframes spiderSlideReveal {
+                0% { 
+                    mask-image: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 0%);
+                    -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 0%);
+                }
+                100% { 
+                    mask-image: linear-gradient(90deg, rgba(0,0,0,1) 100%, rgba(0,0,0,0) 100%);
+                    -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,1) 100%, rgba(0,0,0,0) 100%);
+                }
             }
             .spider-fade-in {
-                animation: spiderFadeIn 0.3s ease-out;
-            }
-            @keyframes spiderFadeIn {
-                from { opacity: 0.5; }
-                to { opacity: 1; }
+                animation: spiderSlideReveal 0.4s ease-out forwards;
             }
         `;
         document.head.appendChild(s);
