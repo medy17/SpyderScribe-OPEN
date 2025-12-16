@@ -191,31 +191,35 @@ async function runStreamingTranslation(source: string, target: string) {
         s.id = 'spider-stream-styles';
         s.innerHTML = `
             @keyframes spiderShimmer {
-                0% { background-position: -100% 0; }
-                100% { background-position: 100% 0; }
+                0% { background-position: -200% 0; }
+                100% { background-position: 200% 0; }
             }
             .spider-shimmer {
+                color: transparent !important; /* Skeleton: hide text */
                 background: linear-gradient(
                     90deg,
-                    transparent 0%,
-                    rgba(100, 100, 100, 0.25) 50%,
-                    transparent 100%
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(59, 130, 246, 0.1) 50%,
+                    rgba(255, 255, 255, 0) 100%
                 );
                 background-size: 200% 100%;
-                animation: spiderShimmer 1.2s ease-in-out infinite;
+                animation: spiderShimmer 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                border-radius: 4px;
             }
-            @keyframes spiderSlideReveal {
-                0% { 
-                    mask-image: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 0%);
-                    -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 0%);
+            @keyframes spiderWordFade {
+                0% {
+                    opacity: 0;
+                    filter: blur(2px);
                 }
-                100% { 
-                    mask-image: linear-gradient(90deg, rgba(0,0,0,1) 100%, rgba(0,0,0,0) 100%);
-                    -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,1) 100%, rgba(0,0,0,0) 100%);
+                100% {
+                    opacity: 1;
+                    filter: blur(0);
                 }
             }
-            .spider-fade-in {
-                animation: spiderSlideReveal 0.4s ease-out forwards;
+            .spider-word {
+                opacity: 0;
+                animation: spiderWordFade 0.5s ease-out forwards;
+                display: inline; /* Protect layout */
             }
         `;
         document.head.appendChild(s);
@@ -316,10 +320,46 @@ async function runStreamingTranslation(source: string, target: string) {
 
                     if (item && item.placeholder && item.placeholder.parentNode) {
                         const span = document.createElement('span');
-                        span.className = 'spider-translated spider-trans-highlight spider-fade-in';
+                        span.className = 'spider-translated spider-trans-highlight';
+
                         // Preserve original whitespace around translation
                         const translationWithWs = item.leadingWs + translation + item.trailingWs;
-                        span.textContent = translationWithWs;
+
+                        // Word-by-word reveal logic
+                        const words = translation.split(' '); // Split only the translation part
+
+                        // Add leading whitespace
+                        if (item.leadingWs) {
+                            span.appendChild(document.createTextNode(item.leadingWs));
+                        }
+
+                        // Create staggered spans for words
+                        words.forEach((word, idx) => {
+                            const wordSpan = document.createElement('span');
+                            wordSpan.textContent = word;
+                            wordSpan.className = 'spider-word';
+                            wordSpan.style.animationDelay = `${idx * 15}ms`; // Fast delay for "typing" effect
+                            span.appendChild(wordSpan);
+
+                            if (idx < words.length - 1) {
+                                span.appendChild(document.createTextNode(' '));
+                            }
+                        });
+
+                        // Add trailing whitespace
+                        if (item.trailingWs) {
+                            span.appendChild(document.createTextNode(item.trailingWs));
+                        }
+
+                        // Cleanup: Flatten DOM after animation
+                        // Total time = (words * delay) + animation duration + buffer
+                        const totalAnimationTime = (words.length * 15) + 500 + 200;
+                        setTimeout(() => {
+                            if (document.body.contains(span)) {
+                                span.textContent = translationWithWs;
+                            }
+                        }, totalAnimationTime);
+
                         span.title = `Original: ${item.leadingWs}${item.text}${item.trailingWs}`;
                         span.dataset.original = item.leadingWs + item.text + item.trailingWs;
                         span.style.cursor = 'help';
@@ -332,6 +372,7 @@ async function runStreamingTranslation(source: string, target: string) {
                                 span.textContent = originalWithWs;
                                 span.style.opacity = '0.6';
                             } else {
+                                // Re-apply simple text content on toggle, no need to re-animate
                                 span.textContent = translationWithWs;
                                 span.style.opacity = '1';
                             }
