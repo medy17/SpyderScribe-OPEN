@@ -67,8 +67,8 @@
 ## Screenshots
 
 | Translate   |      Settings      |  Cache |
-|----------|:-------------:|------:|
-| col 1 is |  left-aligned | $1600 |
+|----------|:-------------:|:------:|
+| <img width="355" height="470" alt="image" src="https://github.com/user-attachments/assets/6a656eb8-fb7d-4c63-a9b1-a6289b29a402" /> |  <img width="354" height="543" alt="image" src="https://github.com/user-attachments/assets/65e50311-8ec8-4c88-8262-4697e3a710d5" /> | <img width="355" height="548" alt="image" src="https://github.com/user-attachments/assets/0e191cad-5b2b-4516-a005-b9c9560eefba" /> |
 ---
 
 ## Installation
