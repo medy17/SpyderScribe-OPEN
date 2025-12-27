@@ -12,12 +12,21 @@ export default function Popup() {
         <div className="w-[360px] min-h-[480px] bg-[#09090b] text-white p-5 font-sans antialiased">
             {/* Header */}
             <header className="flex items-center justify-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/30 font-display">
-                    S
+                <div className="w-8 h-8 rounded-xl shadow-lg shadow-blue-500/30 overflow-hidden">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1387.2 1360.85" className="w-full h-full">
+                        <path d="m1060.6 967.11 49-58 115 147s-188.12 292.81-199 300-77.96 12.37-53-33c27.71-50.37 159-261 159-261zm93-169 147 107 15 270s18.55 39.24 53 6 10.13-285.96 12-315-204-143-204-143zm5-230 19 80 203-147-10-317s-28.15-43.32-62 17c10.06 74.73-3 258-3 258zm-103-166 83-108-138-249s-7.49-54.76 51-41 183 296 183 296l-128 158zm-794 319s3.66-408.12 398-413 471.44 278.94 477 373-97.46 328.2-315 378c-45.33 41.03-67.15 132.81-272 161 0 0 59.53-21.16 73-154-130.38-52.92-323.48-73.99-361-345 77.98-82.81 0 0 0 0m-92 336 197 300s47.72 10.94 53-26-156-268-156-268l72-92-49-59zm51-333-205 147 9 305s18.89 37.19 56 10 6-281 6-281l153-97zm19-157-147-98-12-274s-15.48-50.67-60-12-3 315-3 315l196 155zm102-167-83-105 139-245s8.17-70.96-51-44l-188 294 125 164z" style={{ fill: '#3b82f6', fillRule: 'evenodd' }} />
+                        <path d="m438.94 464.18 214.34-4.71-7.07-80.08 96.57-4.71-2.36 73.02 219.05 11.78-4.71 80.08-75.37 14.13s-30.98 117.56-110.7 216.69c-11.02 13.7 171.94 101.28 171.94 101.28l-49.46 80.08S697.38 861 702.74 838.68 502.54 958.8 502.54 958.8l-44.75-77.73 181.36-98.92-96.57-164.87 84.79-16.49s55.93 110.85 73.02 108.35 77.5-141.13 80.08-155.45-336.81-2.36-336.81-2.36l-4.71-87.15Z" style={{ fill: '#fff', fillRule: 'evenodd' }} />
+                    </svg>
                 </div>
-                <h3 className="m-0 text-xl font-bold bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent tracking-tight font-display">
-                    Spyder-Scribe
-                </h3>
+                <div className="flex flex-col items-start leading-tight">
+                    <h3 className="m-0 text-lg font-bold bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent tracking-tight font-display">
+                        Spyder-Scribe
+                    </h3>
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-1 h-1 rounded-full bg-blue-500"></div>
+                        <span className="text-blue-400 font-medium text-xs tracking-wide uppercase">Community Edition</span>
+                    </div>
+                </div>
             </header>
 
             {/* Tabs */}
