@@ -7,6 +7,9 @@
 <p align="center">
   <strong>AI-powered browser translation with multiple LLM providers</strong>
 </p>
+<p align="center">
+  <em><b>NOTE: </b>This is the community version and does not offer as many features or as streamlined a pipeline as the Pro version.</em>
+</p>
 
 <p align="center"><strong>Tech Stack</strong></p>
 <p align="center">
