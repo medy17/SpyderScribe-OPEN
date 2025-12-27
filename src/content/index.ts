@@ -57,6 +57,7 @@ function removeOverlay() {
 
 // --- Core Translation Engine (fallback - kept for potential non-streaming use) ---
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+// @ts-expect-error Kept as fallback for non-streaming translation
 async function _runFullPageTranslation(source: string, target: string) {
     if (isProcessing) return;
     isProcessing = true;
