@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/icons/icon128.png" alt="Spyder-Scribe" width="128" height="128" />
+  <img src="https://spyder-scribe.vercel.app/logo.svg" alt="Spyder-Scribe" width="128" height="128" />
 </p>
 
 <h1 align="center">Spyder-Scribe</h1>
