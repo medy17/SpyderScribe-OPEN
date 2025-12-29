@@ -83,33 +83,33 @@ export default function SettingsTab() {
             <div className="space-y-2">
                 <Label className="text-xs text-zinc-400 font-medium">AI Model</Label>
                 <Select value={model} onValueChange={setModel}>
-                    <SelectTrigger className="w-full bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] hover:border-zinc-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
+                    <SelectTrigger className="w-full bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] hover:border-zinc-500 focus:border-[#f38bae] focus:ring-2 focus:ring-[#f38bae]/20 transition-all">
                         <SelectValue placeholder="Select Model" />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#18181b] border-blue-500 text-white rounded-[10px] shadow-2xl max-h-[280px]">
+                    <SelectContent className="bg-[#18181b] border-[#f38bae] text-white rounded-[10px] shadow-2xl max-h-[280px]">
                         <SelectGroup>
                             <SelectLabel className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-2 py-1.5">OpenAI Models</SelectLabel>
-                            <SelectItem value="gpt-5-nano" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">GPT-5 Nano</SelectItem>
-                            <SelectItem value="gpt-5-mini" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">GPT-5 Mini</SelectItem>
-                            <SelectItem value="gpt-5" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">GPT-5</SelectItem>
+                            <SelectItem value="gpt-5-nano" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">GPT-5 Nano</SelectItem>
+                            <SelectItem value="gpt-5-mini" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">GPT-5 Mini</SelectItem>
+                            <SelectItem value="gpt-5" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">GPT-5</SelectItem>
                         </SelectGroup>
                         <SelectGroup>
                             <SelectLabel className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-2 py-1.5 border-t border-zinc-800 mt-1">xAI Models (Grok)</SelectLabel>
-                            <SelectItem value="grok-4" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">Grok 4 (Reasoning)</SelectItem>
-                            <SelectItem value="grok-4-fast" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">Grok 4 Fast (Reasoning)</SelectItem>
-                            <SelectItem value="grok-4-fast-non-reasoning" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">Grok 4 Fast (Non-Reasoning)</SelectItem>
-                            <SelectItem value="grok-4-1-fast-reasoning" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">Grok 4.1 Fast Reasoning</SelectItem>
-                            <SelectItem value="grok-4-1-fast-non-reasoning" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">Grok 4.1 Fast</SelectItem>
+                            <SelectItem value="grok-4" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">Grok 4 (Reasoning)</SelectItem>
+                            <SelectItem value="grok-4-fast" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">Grok 4 Fast (Reasoning)</SelectItem>
+                            <SelectItem value="grok-4-fast-non-reasoning" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">Grok 4 Fast (Non-Reasoning)</SelectItem>
+                            <SelectItem value="grok-4-1-fast-reasoning" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">Grok 4.1 Fast Reasoning</SelectItem>
+                            <SelectItem value="grok-4-1-fast-non-reasoning" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">Grok 4.1 Fast</SelectItem>
                         </SelectGroup>
                         <SelectGroup>
                             <SelectLabel className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-2 py-1.5 border-t border-zinc-800 mt-1">Gemini 2.5</SelectLabel>
-                            <SelectItem value="models/gemini-2.5-pro" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">Gemini 2.5 Pro</SelectItem>
-                            <SelectItem value="models/gemini-2.5-flash" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">Gemini 2.5 Flash</SelectItem>
+                            <SelectItem value="models/gemini-2.5-pro" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">Gemini 2.5 Pro</SelectItem>
+                            <SelectItem value="models/gemini-2.5-flash" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">Gemini 2.5 Flash</SelectItem>
                         </SelectGroup>
                         <SelectGroup>
                             <SelectLabel className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-2 py-1.5 border-t border-zinc-800 mt-1">Gemma 3</SelectLabel>
-                            <SelectItem value="models/gemma-3-27b-it" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">Gemma 3 27B IT</SelectItem>
-                            <SelectItem value="models/gemma-3-12b-it" className="focus:bg-[#27272a] data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400">Gemma 3 12B IT</SelectItem>
+                            <SelectItem value="models/gemma-3-27b-it" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">Gemma 3 27B IT</SelectItem>
+                            <SelectItem value="models/gemma-3-12b-it" className="focus:bg-[#27272a] data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]">Gemma 3 12B IT</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -123,7 +123,7 @@ export default function SettingsTab() {
                     placeholder="Enter AI Studio Key"
                     value={geminiKey}
                     onChange={(e) => setGeminiKey(e.target.value)}
-                    className="bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] placeholder:text-zinc-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                    className="bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] placeholder:text-zinc-600 focus:border-[#f38bae] focus:ring-2 focus:ring-[#f38bae]/20 transition-all"
                 />
             </div>
 
@@ -135,7 +135,7 @@ export default function SettingsTab() {
                     placeholder="Enter xAI Console Key"
                     value={grokKey}
                     onChange={(e) => setGrokKey(e.target.value)}
-                    className="bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] placeholder:text-zinc-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                    className="bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] placeholder:text-zinc-600 focus:border-[#f38bae] focus:ring-2 focus:ring-[#f38bae]/20 transition-all"
                 />
             </div>
 
@@ -147,7 +147,7 @@ export default function SettingsTab() {
                     placeholder="Enter OpenAI API Key"
                     value={openaiKey}
                     onChange={(e) => setOpenaiKey(e.target.value)}
-                    className="bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] placeholder:text-zinc-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                    className="bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] placeholder:text-zinc-600 focus:border-[#f38bae] focus:ring-2 focus:ring-[#f38bae]/20 transition-all"
                 />
             </div>
 
@@ -158,7 +158,7 @@ export default function SettingsTab() {
                     placeholder="e.g. example.com (one per line)"
                     value={autoSites}
                     onChange={(e) => setAutoSites(e.target.value)}
-                    className="bg-[#18181b] border-[#27272a] text-white min-h-[80px] rounded-[10px] placeholder:text-zinc-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none"
+                    className="bg-[#18181b] border-[#27272a] text-white min-h-[80px] rounded-[10px] placeholder:text-zinc-600 focus:border-[#f38bae] focus:ring-2 focus:ring-[#f38bae]/20 transition-all resize-none"
                 />
             </div>
 
@@ -170,7 +170,7 @@ export default function SettingsTab() {
                 </div>
                 <button
                     onClick={() => setSelectionPopupEnabled(!selectionPopupEnabled)}
-                    className={`relative w-11 h-6 rounded-full transition-colors ${selectionPopupEnabled ? 'bg-blue-600' : 'bg-zinc-700'
+                    className={`relative w-11 h-6 rounded-full transition-colors ${selectionPopupEnabled ? 'bg-[#f38bae]' : 'bg-zinc-700'
                         }`}
                 >
                     <span

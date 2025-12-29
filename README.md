@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://spyder-scribe.vercel.app/logo.svg" alt="Spyder-Scribe" width="128" height="128" />
+  <img src="/public/icons/logo.svg" alt="Spyder-Scribe" width="128" height="128" />
 </p>
 
 <h1 align="center">Spyder-Scribe</h1>
@@ -74,9 +74,9 @@
 
 ## Screenshots
 
-| Translate                                                                                                                          |                                                              Settings                                                              |                                                               Cache                                                                |
-|------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------:|
-| <img width="355" height="470" alt="image" src="https://github.com/user-attachments/assets/6a656eb8-fb7d-4c63-a9b1-a6289b29a402" /> | <img width="354" height="543" alt="image" src="https://github.com/user-attachments/assets/65e50311-8ec8-4c88-8262-4697e3a710d5" /> | <img width="355" height="548" alt="image" src="https://github.com/user-attachments/assets/0e191cad-5b2b-4516-a005-b9c9560eefba" /> |
+| Translate | Settings | Cache |
+| :--- | :---: | :---: |
+| <img width="352" height="495" alt="image" src="https://github.com/user-attachments/assets/151b36ac-fb72-408c-ab9e-002b747c007e" /> | <img width="351" height="555" alt="image" src="https://github.com/user-attachments/assets/291cf681-0809-4811-838b-461575185bc0" /> | <img width="352" height="471" alt="image" src="https://github.com/user-attachments/assets/9df1d899-0b45-4b1f-bcc9-ed58321b9b41" /> |
 
 ---
 

@@ -123,7 +123,7 @@ export default function CacheTab() {
                         <span className="text-white font-medium">{stats?.memoryCount ?? '-'}</span>
                     </div>
                     <div className="flex items-center gap-2 text-xs">
-                        <HardDrive className="h-3.5 w-3.5 text-blue-400" />
+                        <HardDrive className="h-3.5 w-3.5 text-[#f38bae]" />
                         <span className="text-zinc-400">Disk:</span>
                         <span className="text-white font-medium">{stats?.dbCount ?? '-'}</span>
                     </div>

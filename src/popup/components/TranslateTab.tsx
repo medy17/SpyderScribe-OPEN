@@ -137,15 +137,15 @@ export default function TranslateTab() {
             <div className="space-y-2">
                 <Label className="text-xs text-zinc-400 font-medium">Translate from</Label>
                 <Select value={sourceLang} onValueChange={setSourceLang}>
-                    <SelectTrigger className="w-full bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] hover:border-zinc-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
+                    <SelectTrigger className="w-full bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] hover:border-zinc-500 focus:border-[#f38bae] focus:ring-2 focus:ring-[#f38bae]/20 transition-all">
                         <SelectValue placeholder="Select Language" />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#18181b] border-blue-500 text-white rounded-[10px] shadow-2xl">
+                    <SelectContent className="bg-[#18181b] border-[#f38bae] text-white rounded-[10px] shadow-2xl">
                         {LANGUAGES.map(lang => (
                             <SelectItem
                                 key={lang.value}
                                 value={lang.value}
-                                className="focus:bg-[#27272a] focus:text-white data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400"
+                                className="focus:bg-[#27272a] focus:text-white data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]"
                             >
                                 {lang.label}
                             </SelectItem>
@@ -158,15 +158,15 @@ export default function TranslateTab() {
             <div className="space-y-2">
                 <Label className="text-xs text-zinc-400 font-medium">Translate to</Label>
                 <Select value={targetLang} onValueChange={setTargetLang}>
-                    <SelectTrigger className="w-full bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] hover:border-zinc-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
+                    <SelectTrigger className="w-full bg-[#18181b] border-[#27272a] text-white h-11 rounded-[10px] hover:border-zinc-500 focus:border-[#f38bae] focus:ring-2 focus:ring-[#f38bae]/20 transition-all">
                         <SelectValue placeholder="Select Language" />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#18181b] border-blue-500 text-white rounded-[10px] shadow-2xl">
+                    <SelectContent className="bg-[#18181b] border-[#f38bae] text-white rounded-[10px] shadow-2xl">
                         {LANGUAGES.filter(l => l.value !== "Auto-detect").map(lang => (
                             <SelectItem
                                 key={lang.value}
                                 value={lang.value}
-                                className="focus:bg-[#27272a] focus:text-white data-[state=checked]:bg-blue-500/10 data-[state=checked]:text-blue-400"
+                                className="focus:bg-[#27272a] focus:text-white data-[state=checked]:bg-[#f38bae]/10 data-[state=checked]:text-[#f38bae]"
                             >
                                 {lang.label}
                             </SelectItem>
@@ -180,7 +180,7 @@ export default function TranslateTab() {
                 <Button
                     onClick={handleTranslate}
                     disabled={isTranslating}
-                    className="group w-full h-11 text-sm font-semibold rounded-[10px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 border border-white/10 transition-all duration-300"
+                    className="group w-full h-11 text-sm font-semibold rounded-[10px] bg-gradient-to-r from-[#f38bae] to-[#e86ea1] hover:opacity-90 border border-white/10 transition-all duration-300"
                 >
                     {isTranslating ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
