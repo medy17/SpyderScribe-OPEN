@@ -2,7 +2,7 @@
   <img src="/public/icons/icon128.png" alt="Spyder-Scribe" width="128" height="128" />
 </p>
 
-<h1 align="center">Spyder-Scribe</h1>
+<h1 align="center">Spyder-Scribe Community Edition</h1>
 
 <p align="center">
   <strong>AI-powered browser translation with multiple LLM providers</strong>
