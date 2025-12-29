@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/public/icons/logo.svg" alt="Spyder-Scribe" width="128" height="128" />
+  <img src="/public/icons/logo.svg?" alt="Spyder-Scribe" width="128" height="128" />
 </p>
 
 <h1 align="center">Spyder-Scribe</h1>
