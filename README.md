@@ -40,31 +40,31 @@
 
 ## Features
 
-🌐 **Multi-Provider Translation**
+**Multi-Provider Translation**
 
 - Google Gemini (2.5 Flash, 2.5 Pro, and more)
 - xAI Grok (4.1 Fast, Reasoning variants)
 - OpenAI GPT (5-nano, 5-mini, 5)
 
-⚡ **Translation Modes**
+**Translation Modes**
 
 - **Full Page** – Translate entire web pages with one click
 - **Selection Popup** – Select text to see instant translations
 - **Context Menu** – Right-click to translate selection
 
-🧠 **Smart Caching**
+**Smart Caching**
 
 - Hybrid in-memory + IndexedDB cache
 - 7-day TTL with LRU eviction
 - Survives browser/extension restarts
 
-🎨 **Modern UI**
+**Modern UI**
 
 - Dark theme with glassmorphism design
 - Draggable & resizable translation popups
 - Toast notifications for feedback
 
-🛡️ **Privacy & Control**
+**Privacy & Control**
 
 - Per-site blacklisting
 - All API keys stored locally
