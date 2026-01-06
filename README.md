@@ -37,6 +37,10 @@
 </p>
 
 ---
+<div align="center">
+  <p><strong>In Action:</strong></p>
+  <img src="https://github.com/user-attachments/assets/2d753726-9363-4df9-844b-26a3671259bd" alt="GIF of SPyder-Scribe in action">
+</div>
 
 ## Features
 
